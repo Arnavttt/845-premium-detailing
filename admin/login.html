@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>845 Admin - Log In</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="/assets/logo.png">
+  <link rel="stylesheet" href="/assets/fonts.css">
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+  <div class="login-wrap">
+    <div class="login-card">
+      <img src="/assets/logo.png" alt="845 Premium Detailing">
+      <h1>845 Admin</h1>
+      <div class="login-sub">Site editor - owners only</div>
+      <form id="login-form">
+        <label class="field">
+          <div class="field-label">Password</div>
+          <input type="password" id="password" autocomplete="current-password" autofocus>
+        </label>
+        <div class="form-error hidden" id="login-error"></div>
+        <button type="submit" class="btn btn-red">Log In</button>
+      </form>
+    </div>
+  </div>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var errorEl = document.getElementById('login-error');
+      errorEl.classList.add('hidden');
+      fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: document.getElementById('password').value })
+      })
+        .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, data: d }; }); })
+        .then(function (res) {
+          if (res.ok) {
+            location.href = '/';
+          } else {
+            errorEl.textContent = res.data.error || 'Login failed.';
+            errorEl.classList.remove('hidden');
+          }
+        })
+        .catch(function () {
+          errorEl.textContent = 'Could not reach the server.';
+          errorEl.classList.remove('hidden');
+        });
+    });
+  </script>
+</body>
+</html>

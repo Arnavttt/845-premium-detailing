@@ -1,0 +1,179 @@
+/* 845 Premium Detailing - customer site. Same palette/typography as the
+   original design: #0A0A0A bg, #C8102E red, Barlow / Barlow Condensed. */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #0A0A0A; }
+body {
+  min-height: 100vh;
+  color: #FFFFFF;
+  font-family: 'Barlow', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+input, select, textarea, button { font-family: 'Barlow', sans-serif; }
+::placeholder { color: #5C5C5C; }
+a { text-decoration: none; }
+.hidden { display: none !important; }
+.wrap { max-width: 1140px; margin: 0 auto; padding: 0 24px; width: 100%; }
+
+/* ---------- nav ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(10,10,10,0.92);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #1D1D1D;
+}
+.nav-inner {
+  max-width: 1140px; margin: 0 auto; padding: 12px 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.brand { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.brand img { width: 46px; height: 46px; display: block; }
+.brand-845 { font-family: 'Barlow Condensed', sans-serif; font-size: 24px; font-weight: 700; color: #FFFFFF; line-height: 1; }
+.brand-sub { font-size: 10px; font-weight: 700; letter-spacing: 3px; color: #C8102E; text-transform: uppercase; margin-top: 2px; }
+.nav-links { display: flex; align-items: center; gap: 26px; }
+.nav-links a {
+  cursor: pointer; font-size: 14px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1.5px; padding: 8px 2px 6px; color: #9A9A9A;
+  border-bottom: 2px solid transparent;
+}
+.nav-links a:hover { color: #FFFFFF; }
+.nav-links a.active { color: #FFFFFF; border-bottom-color: #C8102E; }
+
+/* ---------- pages ---------- */
+.page { flex: 1; }
+.page.hidden { display: none; }
+
+/* ---------- buttons ---------- */
+.btn {
+  border: none; border-radius: 999px; cursor: pointer;
+  font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+  padding: 16px 36px;
+}
+.btn-red { background: #C8102E; color: #FFFFFF; }
+.btn-red:hover { background: #E0152F; }
+.btn-ghost { background: transparent; color: #FFFFFF; border: 1px solid #3A3A3A; }
+.btn-ghost:hover { border-color: #C8102E; }
+.btn-dark { background: #0A0A0A; color: #FFFFFF; }
+.btn-dark:hover { background: #1E1E1E; }
+
+/* ---------- home ---------- */
+.hero { max-width: 1140px; margin: 0 auto; padding: 92px 24px 56px; text-align: center; }
+.eyebrow { color: #C8102E; font-size: 13px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; }
+.hero h1 {
+  font-family: 'Barlow Condensed', sans-serif; font-size: clamp(44px, 8vw, 76px);
+  font-weight: 700; line-height: 1.02; text-transform: uppercase; letter-spacing: 1px;
+  color: #FFFFFF; max-width: 860px; margin: 18px auto 0; text-wrap: pretty;
+}
+.hero p { color: #A8A8A8; font-size: 19px; line-height: 1.6; max-width: 640px; margin: 22px auto 0; text-wrap: pretty; }
+.hero-actions { display: flex; gap: 14px; justify-content: center; margin-top: 36px; flex-wrap: wrap; }
+
+.hero-media { width: 100%; aspect-ratio: 21 / 9; border-radius: 16px; overflow: hidden; background: #121212; border: 1px solid #242424; }
+.hero-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.media-placeholder {
+  width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+  color: #5C5C5C; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; font-weight: 600;
+  border: 1px dashed #2E2E2E; border-radius: inherit;
+}
+
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+.section-head h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 42px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.section-link { color: #C8102E; font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; }
+.section-link:hover { color: #E0152F; }
+
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px; margin-top: 28px; }
+.service-card { background: #141414; border: 1px solid #242424; border-radius: 14px; padding: 26px; }
+.service-card:hover { border-color: #C8102E; }
+.service-name { font-family: 'Barlow Condensed', sans-serif; font-size: 23px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #FFFFFF; }
+.service-price-row { display: flex; align-items: baseline; gap: 10px; margin-top: 8px; }
+.service-price { font-family: 'Barlow Condensed', sans-serif; font-size: 30px; font-weight: 700; color: #C8102E; }
+.service-time { font-size: 14px; color: #787878; }
+.service-desc { color: #A0A0A0; font-size: 15px; line-height: 1.6; margin-top: 12px; text-wrap: pretty; }
+
+.points-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 28px; }
+.point { border-top: 2px solid #C8102E; padding-top: 16px; }
+.point-title { font-size: 18px; font-weight: 700; color: #FFFFFF; }
+.point-desc { color: #A0A0A0; font-size: 15px; line-height: 1.6; margin-top: 8px; text-wrap: pretty; }
+
+.cta-banner { background: #C8102E; border-radius: 18px; padding: 52px 32px; text-align: center; }
+.cta-banner h3 { font-family: 'Barlow Condensed', sans-serif; font-size: 40px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #FFFFFF; }
+.cta-banner p { color: rgba(255,255,255,0.85); font-size: 17px; margin: 10px auto 0; max-width: 480px; }
+.cta-banner .btn { margin-top: 26px; }
+
+/* ---------- inner pages ---------- */
+.page-inner { max-width: 680px; width: 100%; margin: 0 auto; padding: 72px 24px 96px; }
+.page-inner.wide { max-width: 1140px; }
+.page-inner.mid { max-width: 720px; }
+.page-inner h1 { font-family: 'Barlow Condensed', sans-serif; font-size: 52px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.page-sub { color: #A8A8A8; font-size: 17px; line-height: 1.6; margin-top: 12px; }
+
+/* ---------- booking ---------- */
+.card { background: #141414; border: 1px solid #242424; border-radius: 16px; padding: 32px; margin-top: 32px; display: grid; gap: 20px; }
+.field-label { font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #C9C9C9; margin-bottom: 8px; }
+.field input, .field select, .field textarea {
+  width: 100%; background: #0E0E0E; border: 1px solid #2A2A2A; color: #FFFFFF;
+  padding: 13px 14px; border-radius: 9px; font-size: 15px; color-scheme: dark;
+}
+.field textarea { line-height: 1.5; resize: vertical; }
+.field select { cursor: pointer; }
+.field input:focus, .field select:focus, .field textarea:focus { border-color: #C8102E; outline: none; }
+
+.slot-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+.slot {
+  background: #0E0E0E; border: 1px solid #2A2A2A; color: #FFFFFF; border-radius: 9px;
+  padding: 12px 8px; font-size: 14px; font-weight: 600; cursor: pointer; text-align: center;
+}
+.slot:hover { border-color: #C8102E; }
+.slot.selected { background: #C8102E; border-color: #C8102E; }
+.slot.booked {
+  color: #5C5C5C; text-decoration: line-through; cursor: not-allowed; border-color: #1E1E1E;
+  background: #101010; position: relative;
+}
+.slot.booked:hover { border-color: #1E1E1E; }
+.slot-note { font-size: 13px; color: #7A7A7A; }
+.slot-empty { border: 1px dashed #2A2A2A; border-radius: 10px; padding: 18px; text-align: center; color: #7A7A7A; font-size: 14px; }
+.form-error { color: #FF5A6E; font-size: 14px; font-weight: 600; }
+
+.success-card { background: #141414; border: 1px solid #2E5C38; border-radius: 16px; padding: 40px 32px; margin-top: 32px; text-align: center; }
+.success-check {
+  width: 54px; height: 54px; border-radius: 50%; background: #1C3A24; color: #6FCF8B;
+  font-size: 26px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto;
+}
+.success-card h2 { font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-top: 18px; }
+.success-card p { color: #A8A8A8; font-size: 16px; line-height: 1.6; margin: 10px auto 0; max-width: 400px; }
+.success-slot { color: #FFFFFF; font-weight: 700; }
+.success-card .btn { margin-top: 26px; padding: 13px 28px; font-size: 14px; }
+
+/* ---------- gallery ---------- */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-top: 32px; }
+.gallery-tile { width: 100%; aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden; background: #121212; border: 1px solid #242424; }
+.gallery-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ---------- contact ---------- */
+.contact-row { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding: 20px 0; border-bottom: 1px solid #1F1F1F; }
+.contact-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #8A8A8A; }
+.contact-value { font-size: 18px; font-weight: 600; color: #FFFFFF; text-align: right; }
+.contact-value.red { color: #C8102E; }
+.contact-cta {
+  background: #141414; border: 1px solid #242424; border-radius: 14px; padding: 26px; margin-top: 36px;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+}
+.contact-cta-text { font-size: 17px; font-weight: 600; }
+.contact-cta .btn { padding: 13px 28px; font-size: 14px; }
+
+/* ---------- footer ---------- */
+.footer { border-top: 1px solid #1A1A1A; }
+.footer-inner {
+  max-width: 1140px; margin: 0 auto; padding: 26px 24px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+}
+.footer-brand { display: flex; align-items: center; gap: 10px; }
+.footer-brand img { width: 30px; height: 30px; display: block; opacity: 0.85; }
+.footer-brand span { color: #6A6A6A; font-size: 14px; }
+.footer-note { color: #4A4A4A; font-size: 13px; font-weight: 600; letter-spacing: 0.5px; }
+
+@media (max-width: 640px) {
+  .nav-inner { flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .nav-links { gap: 16px; }
+  .hero { padding-top: 56px; }
+  .page-inner h1 { font-size: 42px; }
+}

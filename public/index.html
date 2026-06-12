@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>845 Premium Detailing - Mobile Auto Detailing in the Hudson Valley</title>
+  <meta name="description" content="Premium mobile interior and exterior auto detailing serving the 845. Book online - we come to you.">
+  <link rel="icon" href="/assets/logo.png">
+  <link rel="stylesheet" href="/assets/fonts.css">
+  <link rel="stylesheet" href="/site.css">
+</head>
+<body>
+
+  <!-- ============ NAV ============ -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <div class="brand" data-go="home">
+        <img src="/assets/logo.png" alt="845 Premium Detailing">
+        <div>
+          <div class="brand-845">845</div>
+          <div class="brand-sub">Premium Detailing</div>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a data-go="home" class="active">Home</a>
+        <a data-go="book">Book</a>
+        <a data-go="gallery">Gallery</a>
+        <a data-go="contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============ HOME ============ -->
+  <main id="page-home" class="page">
+    <div class="hero">
+      <div class="eyebrow" data-c="heroEyebrow"></div>
+      <h1 data-c="heroTitle"></h1>
+      <p data-c="heroSub"></p>
+      <div class="hero-actions">
+        <button class="btn btn-red" data-go="book">Book a Detail</button>
+        <button class="btn btn-ghost" data-go="gallery">See Our Work</button>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <div class="hero-media">
+        <img src="/assets/hero.jpg" alt="Freshly detailed car"
+             onerror="this.outerHTML='&lt;div class=&quot;media-placeholder&quot;&gt;Photo coming soon&lt;/div&gt;'">
+      </div>
+    </div>
+
+    <div class="wrap" style="padding-top: 80px; padding-bottom: 8px">
+      <div class="section-head">
+        <h2>Services</h2>
+        <a class="section-link" data-go="book">Book now &rarr;</a>
+      </div>
+      <div class="services-grid" id="services-grid"></div>
+    </div>
+
+    <div class="wrap" style="padding-top: 72px">
+      <div class="points-grid" id="points-grid"></div>
+    </div>
+
+    <div class="wrap" style="margin: 72px auto 88px">
+      <div class="cta-banner">
+        <h3 data-c="ctaTitle"></h3>
+        <p data-c="ctaSub"></p>
+        <button class="btn btn-dark" data-go="book">Book a Detail</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============ BOOK ============ -->
+  <main id="page-book" class="page hidden">
+    <div class="page-inner">
+      <h1>Book a Detail</h1>
+      <p class="page-sub">Pick a service, a date and an open time - your slot is reserved instantly and lands on our calendar.</p>
+
+      <form class="card" id="book-form">
+        <label class="field">
+          <div class="field-label">Full name</div>
+          <input type="text" id="bk-name" placeholder="Jane Driver" autocomplete="name">
+        </label>
+        <label class="field">
+          <div class="field-label">Phone</div>
+          <input type="tel" id="bk-phone" placeholder="(845) 555-0123" autocomplete="tel">
+        </label>
+        <label class="field">
+          <div class="field-label">Vehicle</div>
+          <input type="text" id="bk-vehicle" placeholder="2021 BMW 340i - Black">
+        </label>
+        <label class="field">
+          <div class="field-label">Service</div>
+          <select id="bk-service">
+            <option value="">Choose a service&hellip;</option>
+          </select>
+        </label>
+        <label class="field">
+          <div class="field-label">Date</div>
+          <input type="date" id="bk-date">
+        </label>
+        <div class="field">
+          <div class="field-label">Time</div>
+          <div id="bk-slots">
+            <div class="slot-empty">Pick a date above to see open times.</div>
+          </div>
+        </div>
+        <label class="field">
+          <div class="field-label">Anything we should know?</div>
+          <textarea id="bk-notes" rows="3" placeholder="Pet hair, heavy stains, gate code, parking notes&hellip;"></textarea>
+        </label>
+        <div class="form-error hidden" id="bk-error"></div>
+        <button type="submit" class="btn btn-red">Book This Slot</button>
+      </form>
+
+      <div class="success-card hidden" id="book-success">
+        <div class="success-check">&#10003;</div>
+        <h2>You're Booked</h2>
+        <p id="book-success-text"></p>
+        <button class="btn btn-ghost" id="book-again">Book Another</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============ GALLERY ============ -->
+  <main id="page-gallery" class="page hidden">
+    <div class="page-inner wide">
+      <h1>Gallery</h1>
+      <p class="page-sub">Recent details - interiors, exteriors and coatings.</p>
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </div>
+  </main>
+
+  <!-- ============ CONTACT ============ -->
+  <main id="page-contact" class="page hidden">
+    <div class="page-inner mid">
+      <h1>Contact Us</h1>
+      <p class="page-sub">Call, text or DM - whatever's easiest.</p>
+      <div id="contact-rows" style="margin-top: 24px"></div>
+      <div class="contact-cta">
+        <div class="contact-cta-text">Prefer to book online?</div>
+        <button class="btn btn-red" data-go="book">Book a Detail</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="/assets/logo.png" alt="">
+        <span>&copy; 2026 845 Premium Detailing</span>
+      </div>
+      <span class="footer-note">Serving the 845</span>
+    </div>
+  </footer>
+
+  <script src="/app.js"></script>
+</body>
+</html>

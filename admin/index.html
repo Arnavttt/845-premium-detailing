@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>845 Admin - Site Editor</title>
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="/assets/logo.png">
+  <link rel="stylesheet" href="/assets/fonts.css">
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body>
+  <div class="shell">
+
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <img src="/assets/logo.png" alt="">
+        <div>
+          <div class="sidebar-brand-name">845 Admin</div>
+          <div class="sidebar-brand-sub">Site editor</div>
+        </div>
+      </div>
+      <button class="tab-link active" data-tab="content">Site content</button>
+      <button class="tab-link" data-tab="services">Services &amp; pricing</button>
+      <button class="tab-link" data-tab="schedule">Booking times</button>
+      <button class="tab-link" data-tab="bookings">Bookings</button>
+      <button class="tab-link" data-tab="contact">Contact info</button>
+      <button class="tab-link" data-tab="settings">Settings</button>
+      <div class="sidebar-spacer"></div>
+      <button class="sidebar-bottom" id="logout">Log out</button>
+    </aside>
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="main-head">
+          <h2 id="tab-title">Site content</h2>
+          <div class="main-head-note">Changes go live on the main site as soon as you save</div>
+        </div>
+
+        <!-- ======== Site content ======== -->
+        <section class="tab-pane" id="pane-content">
+          <div class="grid-gap">
+            <label class="field">
+              <div class="field-label">Hero eyebrow (small red line)</div>
+              <textarea id="c-heroEyebrow" rows="1"></textarea>
+            </label>
+            <label class="field">
+              <div class="field-label">Hero headline</div>
+              <textarea id="c-heroTitle" rows="2"></textarea>
+            </label>
+            <label class="field">
+              <div class="field-label">Hero subtext</div>
+              <textarea id="c-heroSub" rows="3"></textarea>
+            </label>
+            <label class="field">
+              <div class="field-label">Bottom banner title</div>
+              <textarea id="c-ctaTitle" rows="1"></textarea>
+            </label>
+            <label class="field">
+              <div class="field-label">Bottom banner subtext</div>
+              <textarea id="c-ctaSub" rows="2"></textarea>
+            </label>
+            <div class="section-label">Selling points (home page)</div>
+            <div id="points-list" class="grid-gap"></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-red" data-save="content">Save Content</button>
+          </div>
+        </section>
+
+        <!-- ======== Services ======== -->
+        <section class="tab-pane hidden" id="pane-services">
+          <div id="services-list"></div>
+          <button class="btn-dashed" id="add-service">+ Add a service</button>
+          <div class="btn-row">
+            <button class="btn btn-red" data-save="content">Save Services</button>
+          </div>
+        </section>
+
+        <!-- ======== Booking times ======== -->
+        <section class="tab-pane hidden" id="pane-schedule">
+          <div class="sched-top">
+            <label class="field">
+              <div class="field-label">Slot length</div>
+              <select id="s-slotMinutes">
+                <option value="60">1 hour</option>
+                <option value="90">1.5 hours</option>
+                <option value="120">2 hours</option>
+                <option value="150">2.5 hours</option>
+                <option value="180">3 hours</option>
+                <option value="240">4 hours</option>
+              </select>
+            </label>
+            <label class="field">
+              <div class="field-label">Book up to (days ahead)</div>
+              <input type="number" id="s-maxDaysAhead" min="1" max="365">
+            </label>
+            <label class="field">
+              <div class="field-label">Timezone</div>
+              <input id="s-timezone" list="tz-list">
+              <datalist id="tz-list">
+                <option value="America/New_York"></option>
+                <option value="America/Chicago"></option>
+                <option value="America/Denver"></option>
+                <option value="America/Phoenix"></option>
+                <option value="America/Los_Angeles"></option>
+              </datalist>
+            </label>
+          </div>
+
+          <div class="section-label" style="margin-top: 24px">Weekly hours</div>
+          <div id="weekly-list" style="margin-top: 14px"></div>
+
+          <div class="section-label" style="margin-top: 24px">Blocked dates (days off, holidays)</div>
+          <div class="blocked-add">
+            <input type="date" id="block-date" class="field-input" style="background: #0E0E0E; border: 1px solid #2A2A2A; color: #FFFFFF; padding: 11px 13px; border-radius: 8px; font-size: 14px; color-scheme: dark">
+            <button class="btn btn-ghost" id="add-block">Block Day</button>
+          </div>
+          <div class="blocked-chips" id="blocked-list"></div>
+
+          <div class="btn-row">
+            <button class="btn btn-red" data-save="schedule">Save Booking Times</button>
+          </div>
+        </section>
+
+        <!-- ======== Bookings ======== -->
+        <section class="tab-pane hidden" id="pane-bookings">
+          <div id="bookings-list"></div>
+        </section>
+
+        <!-- ======== Contact ======== -->
+        <section class="tab-pane hidden" id="pane-contact">
+          <div class="grid-gap">
+            <label class="field">
+              <div class="field-label">Phone</div>
+              <input id="c-phone">
+            </label>
+            <label class="field">
+              <div class="field-label">Email</div>
+              <input id="c-email">
+            </label>
+            <label class="field">
+              <div class="field-label">Instagram</div>
+              <input id="c-instagram">
+            </label>
+            <label class="field">
+              <div class="field-label">Service area</div>
+              <input id="c-area">
+            </label>
+            <label class="field">
+              <div class="field-label">Hours (shown on Contact page)</div>
+              <input id="c-hours">
+            </label>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-red" data-save="content">Save Contact Info</button>
+          </div>
+        </section>
+
+        <!-- ======== Settings ======== -->
+        <section class="tab-pane hidden" id="pane-settings">
+          <div class="section-label" style="border-top: none; padding-top: 0">Google Calendar</div>
+          <div id="cal-status" style="margin-top: 6px"></div>
+          <div class="grid-gap" style="margin-top: 18px">
+            <label class="field">
+              <div class="field-label">Calendar ID</div>
+              <input id="set-calendarId" placeholder="you@gmail.com or abc123@group.calendar.google.com">
+            </label>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-red" id="save-settings">Save Calendar ID</button>
+            <button class="btn btn-ghost" id="test-calendar">Test Connection</button>
+          </div>
+          <div id="cal-test-result" style="margin-top: 12px"></div>
+          <div class="help-box" style="margin-top: 18px">
+            Every new booking is pushed to this calendar automatically. To connect it:
+            <ol>
+              <li>In Google Cloud Console, create a project, enable the <b>Google Calendar API</b>, and create a <b>service account</b>.</li>
+              <li>Download the service account's JSON key and save it as <code>google-service-account.json</code> in the project folder (next to <code>server.js</code>).</li>
+              <li>In Google Calendar, share your calendar with the service account's email with <b>"Make changes to events"</b>.</li>
+              <li>Paste the calendar's ID above (Calendar settings &rarr; "Integrate calendar"), save, then hit Test Connection.</li>
+            </ol>
+            The full walkthrough is in <code>README.md</code>.
+          </div>
+
+          <div class="section-label" style="margin-top: 32px">Change admin password</div>
+          <div class="grid-gap" style="margin-top: 18px">
+            <label class="field">
+              <div class="field-label">Current password</div>
+              <input type="password" id="pw-current" autocomplete="current-password">
+            </label>
+            <label class="field">
+              <div class="field-label">New password (min 8 characters)</div>
+              <input type="password" id="pw-next" autocomplete="new-password">
+            </label>
+            <label class="field">
+              <div class="field-label">Confirm new password</div>
+              <input type="password" id="pw-confirm" autocomplete="new-password">
+            </label>
+            <div class="form-error hidden" id="pw-error"></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-red" id="change-password">Change Password</button>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <div id="toast"></div>
+  <script src="/admin.js"></script>
+</body>
+</html>

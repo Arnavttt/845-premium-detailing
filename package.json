@@ -1,0 +1,14 @@
+{
+  "name": "845-premium-detailing",
+  "version": "1.0.0",
+  "description": "845 Premium Detailing - customer site, separate admin site, booking system with Google Calendar sync",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "set-password": "node tools/set-password.js",
+    "build-pages": "node tools/build-pages.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

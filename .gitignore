@@ -1,0 +1,7 @@
+node_modules/
+google-service-account.json
+data/sessions.json
+data/auth.json
+data/bookings.json
+data/settings.json
+.env
