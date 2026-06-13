@@ -22,6 +22,10 @@
 //   - Booking a slot creates the calendar event instantly, so the slot
 //     shows as taken for the next visitor.
 
+// Booking rules live in your GitHub repo and are read at request time, so
+// editing them in the admin (Booking times) updates the booking page with no
+// redeploy. The only delay is GitHub's own CDN on this file (typically seconds,
+// occasionally a couple of minutes); the short cache below keeps that minimal.
 var SCHEDULE_URL = 'https://raw.githubusercontent.com/Arnavttt/845-premium-detailing/main/data/schedule.json';
 var CALENDAR_ID = ''; // '' = your main (default) calendar
 
@@ -75,10 +79,11 @@ function getSchedule() {
   var cached = cache.get('schedule');
   if (cached) return JSON.parse(cached);
   try {
-    var raw = UrlFetchApp.fetch(SCHEDULE_URL, { muteHttpExceptions: true });
+    var raw = UrlFetchApp.fetch(SCHEDULE_URL, { muteHttpExceptions: true, headers: { 'Cache-Control': 'no-cache' } });
     if (raw.getResponseCode() === 200) {
       var schedule = JSON.parse(raw.getContentText());
-      cache.put('schedule', JSON.stringify(schedule), 300); // 5 min
+      // Short cache (was 5 min) so admin edits to booking rules appear fast.
+      cache.put('schedule', JSON.stringify(schedule), 20);
       return schedule;
     }
   } catch (err) {

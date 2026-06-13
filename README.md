@@ -116,9 +116,15 @@ Cloud project, no keys. One-time setup, about 5 minutes:
    `window.BOOKING_API = "https://script.google.com/macros/s/.../exec";`
 5. Commit and push - live slot booking is now on the public site.
 
-The script reads its booking rules from this repo's `data/schedule.json`, so
-after changing **Booking times** in the admin, push to update the public site
-(rules refresh within 5 minutes).
+The script reads its booking rules from this repo's `data/schedule.json` at
+request time, so editing **Booking times** in the admin updates the live
+booking page with no redeploy. Propagation is gated by GitHub's CDN on that
+file (typically seconds, occasionally a minute or two); the script keeps only
+a 20-second internal cache so it does not add delay on top.
+
+> If you ever edit `Code.gs` itself, redeploy to push the code change:
+> **Deploy -> Manage deployments -> ✏️ edit -> Version: New version -> Deploy**
+> (keeps the same `/exec` URL). Editing booking *rules* needs no redeploy.
 
 ## Connect Google Calendar - hosted Node backend (optional)
 
