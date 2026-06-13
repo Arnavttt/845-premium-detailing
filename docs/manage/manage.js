@@ -323,7 +323,7 @@
   });
 
   // ---------- settings: booking backend URL (docs/config.js) ----------
-  function configText(url) {
+  function configText(url, sitekey) {
     return [
       '// Set this to your booking backend to enable live slot booking on the',
       '// public site. Easiest: deploy apps-script/Code.gs as a web app (see',
@@ -332,6 +332,11 @@
       '// A hosted copy of server.js works too. Leave empty to show call/text',
       '// contact options on the Book page instead.',
       'window.BOOKING_API = "' + url + '";',
+      '',
+      '// Optional Cloudflare Turnstile site key (bot protection on the booking',
+      '// form). Pair it with a TURNSTILE_SECRET Script Property in the Apps',
+      '// Script project. Leave empty to keep booking open.',
+      'window.TURNSTILE_SITEKEY = "' + (sitekey || '') + '";',
       ''
     ].join('\n');
   }
@@ -339,9 +344,11 @@
   $('save-bookingApi').addEventListener('click', function () {
     var url = $('set-bookingApi').value.trim().replace(/"/g, '');
     setBusy(true);
-    // Need the current sha for docs/config.js before overwriting it.
-    readFile('docs/config.js').then(function () {
-      return writeFile('docs/config.js', configText(url), 'Set booking backend URL via admin');
+    // Need the current sha for docs/config.js before overwriting it, and
+    // preserve any existing Turnstile site key so saving the URL won't wipe it.
+    readFile('docs/config.js').then(function (text) {
+      var m = text.match(/^window\.TURNSTILE_SITEKEY\s*=\s*"([^"]*)"/m);
+      return writeFile('docs/config.js', configText(url, m ? m[1] : ''), 'Set booking backend URL via admin');
     }).then(function () {
       toast(url ? 'Backend URL saved - live booking is on' : 'Backend URL cleared');
     }).catch(function (err) {

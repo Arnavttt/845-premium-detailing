@@ -54,6 +54,10 @@ if (!fs.existsSync(configPath)) {
     '// A hosted copy of server.js works too. Leave empty to show call/text',
     '// contact options on the Book page instead.',
     'window.BOOKING_API = "";',
+    '',
+    '// Optional Cloudflare Turnstile site key (bot protection on the booking',
+    '// form). Pair with a TURNSTILE_SECRET Script Property in the Apps Script.',
+    'window.TURNSTILE_SITEKEY = "";',
     ''
   ].join('\n'));
 }

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /manage/
+
+Sitemap: https://arnavttt.github.io/845-premium-detailing/sitemap.xml

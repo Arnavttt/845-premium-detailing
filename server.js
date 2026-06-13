@@ -185,6 +185,10 @@ async function handleCreateBooking(req, res) {
     calendarError: null
   };
 
+  // Honeypot: real users never fill "company"; bots that do are rejected.
+  if (clean(body.company, 100)) {
+    return sendJson(res, 400, { error: 'Booking could not be completed.' });
+  }
   if (!booking.name || !booking.phone || !booking.service || !booking.date || !booking.time) {
     return sendJson(res, 400, { error: 'Please fill in your name, phone, a service, a date and a time.' });
   }

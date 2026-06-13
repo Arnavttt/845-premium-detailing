@@ -184,6 +184,21 @@ function availability(dateStr) {
 
 // ---------------------------------------------------------------- booking --
 
+// Verify a Cloudflare Turnstile token server-side against the secret.
+function verifyTurnstile(secret, token) {
+  if (!token) return false;
+  try {
+    var res = UrlFetchApp.fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'post',
+      muteHttpExceptions: true,
+      payload: { secret: secret, response: token }
+    });
+    return JSON.parse(res.getContentText()).success === true;
+  } catch (err) {
+    return false;
+  }
+}
+
 function createBooking(body) {
   var clean = function (v, max) { return String(v == null ? '' : v).trim().slice(0, max || 200); };
   var booking = {
@@ -195,6 +210,16 @@ function createBooking(body) {
     time: clean(body.time, 5),
     notes: clean(body.notes, 600)
   };
+  // Honeypot: real users never fill "company"; bots that do are rejected.
+  if (clean(body.company, 100)) {
+    return { ok: false, code: 400, error: 'Booking could not be completed.' };
+  }
+  // Bot mitigation: if a TURNSTILE_SECRET Script Property is set, require a
+  // valid Cloudflare Turnstile token. Without it, this check is skipped.
+  var tsSecret = PropertiesService.getScriptProperties().getProperty('TURNSTILE_SECRET');
+  if (tsSecret && !verifyTurnstile(tsSecret, body.cfToken)) {
+    return { ok: false, code: 400, error: 'Verification failed - please try the booking again.' };
+  }
   if (!booking.name || !booking.phone || !booking.service || !booking.date || !booking.time) {
     return { ok: false, code: 400, error: 'Please fill in your name, phone, a service, a date and a time.' };
   }

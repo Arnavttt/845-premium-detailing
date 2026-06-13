@@ -5,3 +5,9 @@
 // A hosted copy of server.js works too. Leave empty to show call/text
 // contact options on the Book page instead.
 window.BOOKING_API = "https://script.google.com/macros/s/AKfycbxBoG2TmeV5LAygkvViCUhcLO6Ad9gsksrph6l4E7ERBHKh8CTkwQDvbMSwE50kgh9l/exec";
+
+// Optional Cloudflare Turnstile site key (bot protection on the booking form).
+// Leave empty to keep booking open. To enable: paste your Turnstile *site key*
+// here AND add the matching *secret* as a TURNSTILE_SECRET Script Property in
+// the Apps Script project, then redeploy the script.
+window.TURNSTILE_SITEKEY = "";

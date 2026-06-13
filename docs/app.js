@@ -186,11 +186,37 @@
       '</div>';
   }
 
+  // Cloudflare Turnstile (bot mitigation) - dormant until window.TURNSTILE_SITEKEY
+  // is set in config.js. When unset, the booking form behaves exactly as before.
+  var turnstileWidgetId = null;
+  function turnstileEnabled() { return !!window.TURNSTILE_SITEKEY; }
+  function resetTurnstile() {
+    if (turnstileEnabled() && window.turnstile && turnstileWidgetId !== null) {
+      try { window.turnstile.reset(turnstileWidgetId); } catch (e) {}
+    }
+  }
+  function setupTurnstile() {
+    if (!turnstileEnabled()) return;
+    $('bk-turnstile-field').classList.remove('hidden');
+    var render = function () {
+      if (window.turnstile && turnstileWidgetId === null) {
+        turnstileWidgetId = window.turnstile.render('#bk-turnstile', { sitekey: window.TURNSTILE_SITEKEY });
+      }
+    };
+    if (window.turnstile) { render(); return; }
+    var s = document.createElement('script');
+    s.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    s.async = true; s.defer = true;
+    s.onload = render;
+    document.head.appendChild(s);
+  }
+
   function setupBooking() {
     if (!bookingEnabled) {
       renderBookingFallback();
       return;
     }
+    setupTurnstile();
     fetch(apiUrl('window'))
       .then(function (r) { return r.json(); })
       .then(function (w) {
@@ -212,7 +238,8 @@
         service: $('bk-service').value,
         date: $('bk-date').value,
         time: selectedTime,
-        notes: $('bk-notes').value.trim()
+        notes: $('bk-notes').value.trim(),
+        company: $('bk-company').value // honeypot - real users leave this empty
       };
       if (!payload.name || !payload.phone || !payload.service || !payload.date) {
         showError('Please fill in your name, phone, a service and a date.');
@@ -221,6 +248,13 @@
       if (!payload.time) {
         showError('Please pick an open time slot.');
         return;
+      }
+      if (turnstileEnabled()) {
+        payload.cfToken = (window.turnstile && turnstileWidgetId !== null) ? window.turnstile.getResponse(turnstileWidgetId) : '';
+        if (!payload.cfToken) {
+          showError('Please complete the quick verification below.');
+          return;
+        }
       }
       var button = e.target.querySelector('button[type=submit]');
       button.disabled = true;
@@ -237,6 +271,7 @@
         .then(function (res) {
           button.disabled = false;
           button.textContent = 'Book This Slot';
+          resetTurnstile();
           // Apps Script always answers HTTP 200, so failures ride in the body
           // as ok:false + code; the Node backend uses real status codes.
           if (!res.ok || res.data.ok === false) {
@@ -255,6 +290,7 @@
         .catch(function () {
           button.disabled = false;
           button.textContent = 'Book This Slot';
+          resetTurnstile();
           showError('Could not reach the server - please try again.');
         });
     });

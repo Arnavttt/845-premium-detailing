@@ -6,6 +6,12 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>845 Premium Detailing - Mobile Auto Detailing in the Hudson Valley</title>
   <meta name="description" content="Premium mobile interior and exterior auto detailing serving the 845. Book online - we come to you.">
+  <meta name="theme-color" content="#0A0A0A">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="845 Premium Detailing - Mobile Auto Detailing">
+  <meta property="og:description" content="Premium mobile interior and exterior auto detailing serving the 845. Book online - we come to you.">
+  <meta property="og:image" content="/assets/logo.png">
+  <meta name="twitter:card" content="summary">
   <link rel="icon" href="/assets/logo.png">
   <link rel="stylesheet" href="/assets/fonts.css">
   <link rel="stylesheet" href="/site.css">
@@ -110,6 +116,15 @@
           <div class="field-label">Anything we should know?</div>
           <textarea id="bk-notes" rows="3" placeholder="Pet hair, heavy stains, gate code, parking notes&hellip;"></textarea>
         </label>
+        <!-- Honeypot: hidden from real users; bots that fill it are rejected server-side. -->
+        <div class="hp-field" aria-hidden="true">
+          <label>Company <input type="text" id="bk-company" tabindex="-1" autocomplete="off"></label>
+        </div>
+        <!-- Cloudflare Turnstile: stays hidden until a site key is set in config.js. -->
+        <div class="field hidden" id="bk-turnstile-field">
+          <div class="field-label">Quick verification</div>
+          <div id="bk-turnstile"></div>
+        </div>
         <div class="form-error hidden" id="bk-error"></div>
         <button type="submit" class="btn btn-red">Book This Slot</button>
       </form>
