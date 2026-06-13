@@ -37,7 +37,8 @@
 
   // ---------- GitHub REST helpers ----------
   function gh(method, path, body) {
-    return fetch('https://api.github.com/repos/' + REPO + '/' + path, {
+    // No trailing slash when path is empty (the repo root) - GitHub 404s on it.
+    return fetch('https://api.github.com/repos/' + REPO + (path ? '/' + path : ''), {
       method: method,
       headers: {
         Authorization: 'Bearer ' + token,
@@ -81,25 +82,45 @@
 
   $('login-form').addEventListener('submit', function (e) {
     e.preventDefault();
-    var entered = $('token').value.trim();
+    // Strip ALL whitespace - pasted tokens often arrive with line breaks or
+    // spaces, which would make an invalid HTTP header and throw on fetch.
+    var entered = $('token').value.replace(/\s+/g, '');
     $('login-error').classList.add('hidden');
     if (!entered) return;
     token = entered;
     var btn = e.target.querySelector('button');
     btn.disabled = true; btn.textContent = 'Signing in...';
-    // Verify the token can read the repo before we commit to it.
-    gh('GET', '').then(function (res) {
-      btn.disabled = false; btn.textContent = 'Sign In';
+
+    // Always reset the button and show a reason - never leave it spinning.
+    function fail(msg) {
+      token = '';
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+      showLogin(msg);
+    }
+
+    var p;
+    try {
+      // Verify the token can read the repo before we commit to it.
+      p = gh('GET', '');
+    } catch (err) {
+      return fail('Could not start sign-in: ' + (err && err.message ? err.message : 'check the token for stray characters') + '.');
+    }
+    p.then(function (res) {
       if (!res.ok) {
-        token = '';
-        return showLogin(res.status === 401 ? 'That token was rejected. Check it has access to this repo.' : (res.data.message || 'Sign-in failed.'));
+        return fail(res.status === 401
+          ? 'That token was rejected. Make sure it is a fine-grained token for this repo with Contents: Read and write (and not expired or revoked).'
+          : (res.data && res.data.message ? res.data.message : 'Sign-in failed (HTTP ' + res.status + ').'));
       }
       if (res.data.permissions && !res.data.permissions.push) {
-        token = '';
-        return showLogin('That token is read-only. It needs Contents: Read and write on this repo.');
+        return fail('That token is read-only. It needs Contents: Read and write on this repo.');
       }
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
       localStorage.setItem(TOKEN_KEY, token);
       boot();
+    }).catch(function (err) {
+      fail('Could not reach GitHub: ' + (err && err.message ? err.message : 'network error') + '. Check your connection, then try again.');
     });
   });
 
