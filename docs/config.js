@@ -4,4 +4,4 @@
 //   window.BOOKING_API = "https://script.google.com/macros/s/XXXX/exec";
 // A hosted copy of server.js works too. Leave empty to show call/text
 // contact options on the Book page instead.
-window.BOOKING_API = "";
+window.BOOKING_API = "https://script.google.com/macros/s/AKfycbxBoG2TmeV5LAygkvViCUhcLO6Ad9gsksrph6l4E7ERBHKh8CTkwQDvbMSwE50kgh9l/exec";
