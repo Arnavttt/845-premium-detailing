@@ -180,3 +180,80 @@ a { text-decoration: none; }
   .hero { padding-top: 56px; }
   .page-inner h1 { font-size: 42px; }
 }
+
+/* ============ MOTION SYSTEM ============ */
+/* One easing + a few durations drive every animation, so timing stays
+   consistent site-wide. Reusable: add class "reveal" to anything that should
+   fade/slide in on scroll; everything else is hover/transition polish. */
+:root {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1); /* smooth, premium ease-out */
+  --dur-fast: 160ms;
+  --dur: 280ms;
+  --dur-slow: 620ms;
+}
+
+/* ---- interactive hover/focus polish (subtle lift + soft shadow) ---- */
+.btn { transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease),
+                   transform var(--dur-fast) var(--ease), box-shadow var(--dur) var(--ease); }
+.btn-red:hover, .btn-ghost:hover, .btn-dark:hover { transform: translateY(-2px); }
+.btn-red:hover { box-shadow: 0 8px 22px rgba(200,16,46,0.28); }
+.btn:active { transform: translateY(0); }
+.brand { transition: opacity var(--dur) var(--ease); }
+.brand:hover { opacity: 0.85; }
+.nav-links a { transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease); }
+.section-link { transition: color var(--dur) var(--ease), transform var(--dur-fast) var(--ease); }
+.section-link:hover { transform: translateX(3px); }
+
+.service-card { transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease); }
+.service-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(0,0,0,0.35); }
+.point { transition: transform var(--dur) var(--ease); }
+.point:hover { transform: translateY(-2px); }
+
+.gallery-tile { transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease); }
+.gallery-tile:hover { transform: translateY(-3px); border-color: #C8102E; box-shadow: 0 14px 30px rgba(0,0,0,0.35); }
+.gallery-tile img { transition: transform var(--dur-slow) var(--ease); }
+.gallery-tile:hover img { transform: scale(1.05); }
+
+.slot { transition: border-color var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease); }
+.slot:hover { transform: translateY(-1px); }
+.field input, .field select, .field textarea { transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease); }
+.field input:focus, .field select:focus, .field textarea:focus { box-shadow: 0 0 0 3px rgba(200,16,46,0.16); }
+.contact-row { transition: border-color var(--dur) var(--ease); }
+
+/* ---- reveal-on-scroll (only active once JS adds html.anim, so no-JS shows all) ---- */
+.anim .reveal {
+  opacity: 0; transform: translateY(18px);
+  transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
+  transition-delay: var(--rd, 0ms);
+}
+.anim .reveal.in { opacity: 1; transform: none; }
+
+/* ---- section/page enter transition on navigation ---- */
+.page.page-anim { animation: pageEnter var(--dur-slow) var(--ease) both; }
+@keyframes pageEnter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+
+/* ---- subtle themed background accent behind the hero (never blocks text) ---- */
+.hero { position: relative; }
+.hero::before {
+  content: ''; position: absolute; z-index: -1; top: -8%; left: 50%;
+  width: min(720px, 92%); height: 300px; transform: translateX(-50%);
+  pointer-events: none;
+  background: radial-gradient(closest-side, rgba(200,16,46,0.16), rgba(200,16,46,0) 70%);
+  animation: heroGlow 7s ease-in-out infinite;
+}
+@keyframes heroGlow {
+  0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
+  50% { opacity: 0.85; transform: translateX(-50%) scale(1.06); }
+}
+
+/* ---- accessibility: respect reduced-motion ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .anim .reveal { opacity: 1 !important; transform: none !important; }
+  .hero::before { animation: none; opacity: 0.6; }
+}

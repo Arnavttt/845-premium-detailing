@@ -32,6 +32,53 @@
     return div.innerHTML;
   }
 
+  // ---------- motion (reveal-on-scroll + page transitions, reusable) ----------
+  var prefersReduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var revealObserver = null;
+
+  function initMotion() {
+    // Enables the reveal hidden-state in CSS; without JS, content stays visible.
+    document.documentElement.classList.add('anim');
+    if (prefersReduced || !('IntersectionObserver' in window)) return;
+    revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add('in');
+          revealObserver.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+  }
+
+  // Mark elements as reveal targets (optional stagger, ms) and observe them.
+  function reveal(els, stagger) {
+    if (!els) return;
+    var list = els.nodeType ? [els] : els;
+    var i = 0;
+    Array.prototype.forEach.call(list, function (el) {
+      if (!el || el.classList.contains('reveal')) return;
+      el.classList.add('reveal');
+      if (stagger) el.style.setProperty('--rd', (i * stagger) + 'ms');
+      i++;
+      if (revealObserver) revealObserver.observe(el);
+      else el.classList.add('in'); // reduced motion / no IO: show immediately
+    });
+  }
+
+  // Static (in-HTML) elements that should reveal on the home + inner pages.
+  function revealStatics() {
+    reveal([
+      document.querySelector('.hero .eyebrow'),
+      document.querySelector('.hero h1'),
+      document.querySelector('.hero p'),
+      document.querySelector('.hero-actions')
+    ], 90);
+    reveal(document.querySelector('.hero-media'));
+    reveal(document.querySelectorAll('.section-head'));
+    reveal(document.querySelector('.cta-banner'));
+    reveal(document.querySelector('.contact-cta'));
+  }
+
   // ---------- page switching ----------
   var pages = ['home', 'book', 'gallery', 'contact'];
 
@@ -43,6 +90,15 @@
       a.classList.toggle('active', a.getAttribute('data-go') === page);
     });
     window.scrollTo(0, 0);
+    var el = $('page-' + page);
+    // Reveal this page's content now that it's visible (stagger preserved via
+    // each item's transition-delay) - guarantees nothing stays stuck hidden.
+    el.querySelectorAll('.reveal').forEach(function (r) { r.classList.add('in'); });
+    if (!prefersReduced) {
+      el.classList.remove('page-anim');
+      void el.offsetWidth; // reflow so the animation restarts each switch
+      el.classList.add('page-anim');
+    }
   }
 
   document.addEventListener('click', function (e) {
@@ -96,6 +152,11 @@
         '<div class="contact-value' + (row[2] ? ' red' : '') + '">' + esc(row[1]) + '</div>' +
       '</div>';
     }).join('');
+
+    // Animate the freshly-rendered cards/rows in as they scroll into view.
+    reveal($('services-grid').children, 70);
+    reveal($('points-grid').children, 70);
+    reveal($('contact-rows').children, 50);
   }
 
   // ---------- gallery ----------
@@ -115,6 +176,7 @@
       tile.appendChild(img);
       grid.appendChild(tile);
     }
+    reveal(grid.children, 60);
   }
 
   // ---------- booking ----------
@@ -313,6 +375,7 @@
   }
 
   // ---------- boot ----------
+  initMotion();
   if (window.SITE_CONTENT) {
     renderContent(window.SITE_CONTENT);
     renderGallery();
@@ -325,4 +388,5 @@
     renderGallery();
     setupBooking();
   }
+  revealStatics();
 })();
