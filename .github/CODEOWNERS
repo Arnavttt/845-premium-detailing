@@ -1,0 +1,22 @@
+# Code ownership for 845 Premium Detailing.
+# The owner is required to review changes to security-sensitive paths once
+# pull-request review enforcement is enabled on a protected branch.
+# (Advisory until "require a pull request before merging" is turned on.)
+
+# Default owner for everything
+*                       @Arnavttt
+
+# CI/CD, deployment config, and security policy
+/.github/               @Arnavttt
+/tools/                 @Arnavttt
+/docs/config.js         @Arnavttt
+
+# Auth, server, API, and booking backend
+/server.js              @Arnavttt
+/lib/                   @Arnavttt
+/admin/                 @Arnavttt
+/public/manage/         @Arnavttt
+/apps-script/           @Arnavttt
+
+# Booking rules and site data
+/data/                  @Arnavttt

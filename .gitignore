@@ -5,3 +5,7 @@ data/auth.json
 data/bookings.json
 data/settings.json
 .env
+
+# Internal security artifact - delivered to the owner, not published while the
+# repo is public (it documents residual risks and internal structure).
+REMEDIATION-REPORT.md

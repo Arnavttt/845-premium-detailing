@@ -11,8 +11,10 @@ on:
       - 'tools/build-pages.js'
   workflow_dispatch:
 
+# Least privilege: read-only by default, the one job that needs to push the
+# rebuilt docs/ elevates to contents:write locally.
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: build-pages
@@ -21,10 +23,14 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v4
+      # Third-party actions pinned to a commit SHA (supply-chain hardening);
+      # Dependabot (.github/dependabot.yml) keeps these current.
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: '20'
 
