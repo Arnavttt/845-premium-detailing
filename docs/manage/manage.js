@@ -350,9 +350,10 @@
         toast(err.message, true);
       });
 
-    // Current booking backend URL (best-effort).
+    // Current booking backend URL (best-effort). Anchor to the real
+    // assignment line so the example URL in the comments is ignored.
     readFile('docs/config.js').then(function (text) {
-      var m = text.match(/BOOKING_API\s*=\s*"([^"]*)"/);
+      var m = text.match(/^window\.BOOKING_API\s*=\s*"([^"]*)"/m);
       $('set-bookingApi').value = m ? m[1] : '';
     }).catch(function () {});
 
