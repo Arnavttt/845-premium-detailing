@@ -6,6 +6,7 @@ data/bookings.json
 data/settings.json
 .env
 
-# Internal security artifact - delivered to the owner, not published while the
-# repo is public (it documents residual risks and internal structure).
+# Internal security artifacts - delivered to the owner, not published while the
+# repo is public (they document residual risks and internal structure).
 REMEDIATION-REPORT.md
+MIGRATION_REPORT.md
