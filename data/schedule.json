@@ -1,7 +1,7 @@
 {
     "timezone":  "America/New_York",
     "slotMinutes":  120,
-    "maxDaysAhead":  30,
+    "maxDaysAhead":  33,
     "weekly":  {
                    "0":  {
                              "open":  false,
