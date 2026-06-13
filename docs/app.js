@@ -14,6 +14,15 @@
     ? window.BOOKING_API.replace(/\/+$/, '')
     : '';
   var bookingEnabled = !window.STATIC_SITE || !!API;
+  // Google Apps Script web apps are a single /exec URL routed by ?action=,
+  // while the Node backend uses /api/* paths. Same JSON shapes either way.
+  var IS_GAS = /script\.google(usercontent)?\.com/.test(API);
+
+  function apiUrl(action, query) {
+    if (IS_GAS) return API + '?action=' + action + (query ? '&' + query : '');
+    var paths = { availability: '/api/availability', window: '/api/booking-window' };
+    return API + paths[action] + (query ? '?' + query : '');
+  }
 
   function $(id) { return document.getElementById(id); }
 
@@ -123,7 +132,7 @@
       return;
     }
     box.innerHTML = '<div class="slot-empty">Checking open times&hellip;</div>';
-    fetch(API + '/api/availability?date=' + encodeURIComponent(date))
+    fetch(apiUrl('availability', 'date=' + encodeURIComponent(date)))
       .then(function (r) { return r.json(); })
       .then(function (day) {
         if (!day.open || !day.slots.length) {
@@ -173,7 +182,7 @@
       '<div style="text-align: center; padding: 8px 0">' +
         '<div class="field-label" style="margin-bottom: 14px">Call or text to grab a slot</div>' +
         '<a href="tel:' + esc((c.phone || '').replace(/[^+\d]/g, '')) + '" style="font-family: \'Barlow Condensed\', sans-serif; font-size: 42px; font-weight: 700; color: #C8102E">' + esc(c.phone || '') + '</a>' +
-        '<p style="color: #A8A8A8; font-size: 15px; line-height: 1.6; margin: 14px auto 0; max-width: 380px">Tell us your vehicle and the service you want - we’ll confirm your time the same day. You can also DM ' + esc(c.instagram || '') + '.</p>' +
+        '<p style="color: #A8A8A8; font-size: 15px; line-height: 1.6; margin: 14px auto 0; max-width: 380px">Tell us your vehicle and the service you want - we\'ll confirm your time the same day. You can also DM ' + esc(c.instagram || '') + '.</p>' +
       '</div>';
   }
 
@@ -182,7 +191,7 @@
       renderBookingFallback();
       return;
     }
-    fetch(API + '/api/booking-window')
+    fetch(apiUrl('window'))
       .then(function (r) { return r.json(); })
       .then(function (w) {
         var date = $('bk-date');
@@ -217,24 +226,28 @@
       button.disabled = true;
       button.textContent = 'Booking…';
 
-      fetch(API + '/api/bookings', {
+      // text/plain avoids a CORS preflight, which Apps Script can't answer;
+      // the Node backend parses the JSON body regardless of content type.
+      fetch(IS_GAS ? API : API + '/api/bookings', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload)
       })
         .then(function (r) { return r.json().then(function (data) { return { ok: r.ok, status: r.status, data: data }; }); })
         .then(function (res) {
           button.disabled = false;
           button.textContent = 'Book This Slot';
-          if (!res.ok) {
+          // Apps Script always answers HTTP 200, so failures ride in the body
+          // as ok:false + code; the Node backend uses real status codes.
+          if (!res.ok || res.data.ok === false) {
             showError(res.data.error || 'Something went wrong - please try again.');
-            if (res.status === 409) loadSlots(payload.date); // slot got taken - refresh
+            if (res.status === 409 || res.data.code === 409) loadSlots(payload.date); // slot got taken - refresh
             return;
           }
           var b = res.data.booking;
           $('book-success-text').innerHTML = 'See you on <span class="success-slot">' +
             esc(prettyDate(b.date)) + ' at ' + esc(b.label) + '</span> for your ' +
-            esc(b.service) + '. We’ll text you if anything comes up.';
+            esc(b.service) + '. We\'ll text you if anything comes up.';
           $('book-form').classList.add('hidden');
           $('book-success').classList.remove('hidden');
           window.scrollTo(0, 0);

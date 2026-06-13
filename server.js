@@ -141,7 +141,9 @@ const mainServer = http.createServer(async (req, res) => {
     if (url.pathname === '/api/availability' && req.method === 'GET') {
       const schedule = store.read('schedule', {});
       const bookings = store.read('bookings', []);
-      return sendJson(res, 200, slots.slotsForDate(url.searchParams.get('date') || '', schedule, bookings));
+      const date = url.searchParams.get('date') || '';
+      const busy = await safeBusyRanges(date, schedule);
+      return sendJson(res, 200, slots.slotsForDate(date, schedule, bookings, busy));
     }
 
     if (url.pathname === '/api/bookings' && req.method === 'POST') {
@@ -154,6 +156,18 @@ const mainServer = http.createServer(async (req, res) => {
     sendJson(res, 500, { error: 'Something went wrong on our end. Please try again.' });
   }
 });
+
+// Busy ranges from Google Calendar, or [] when not configured/unreachable -
+// availability must keep working even if Google is down.
+async function safeBusyRanges(date, schedule) {
+  if (!calendar.isConfigured() || !slots.isDateStr(date)) return [];
+  try {
+    return await calendar.busyRangesForDate(date, schedule);
+  } catch (err) {
+    console.error('[calendar] free/busy failed:', err.message);
+    return [];
+  }
+}
 
 async function handleCreateBooking(req, res) {
   const body = await readJsonBody(req);
@@ -184,7 +198,8 @@ async function handleCreateBooking(req, res) {
 
   const schedule = store.read('schedule', {});
   const bookings = store.read('bookings', []);
-  const day = slots.slotsForDate(booking.date, schedule, bookings);
+  const busy = await safeBusyRanges(booking.date, schedule);
+  const day = slots.slotsForDate(booking.date, schedule, bookings, busy);
   const slot = day.slots.find((s) => s.time === booking.time);
   if (!day.open || !slot) {
     return sendJson(res, 400, { error: day.reason || 'That date is not open for bookings.' });

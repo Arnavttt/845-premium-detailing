@@ -46,19 +46,41 @@ immediately.
 ## How booking works
 
 1. Customer picks a service, a date, and one of the open time slots.
-2. The server re-checks the slot is still free, then reserves it. That time
-   immediately shows as crossed-out/"Booked" for everyone else on the main site.
-3. If Google Calendar is connected, an event is created on your calendar with
-   the customer's name, phone, vehicle, and notes.
-4. Deleting a booking in the admin reopens the slot and deletes the calendar
-   event.
+2. The backend re-checks the slot is still free, then reserves it. That time
+   immediately shows as crossed-out/"Booked" for everyone else on the site.
+3. An event is created on your Google Calendar with the customer's name,
+   phone, vehicle, and notes.
+4. The site and calendar stay synced both ways: open slots are computed
+   against the events actually on the calendar, so anything you add there by
+   hand (a dentist appointment, a manual booking) crosses that slot out on
+   the site too. Deleting an event on the calendar reopens the slot.
 
-A booking always succeeds even if Google Calendar is down or not configured -
-the admin Bookings tab shows a "Not on calendar" badge so nothing is lost.
+Booking rules (slot length, weekly hours, blocked dates, how far out people
+can book, timezone) are edited in the admin site under **Booking times**.
 
-## Connect Google Calendar
+## Connect Google Calendar - public site (easiest)
 
-One-time setup, about 10 minutes:
+The public GitHub Pages site books through a free Google Apps Script that
+lives on your Google account and writes straight to your calendar. No Google
+Cloud project, no keys. One-time setup, about 5 minutes:
+
+1. Go to [script.google.com](https://script.google.com) -> **New project**.
+2. Paste in the whole contents of [`apps-script/Code.gs`](apps-script/Code.gs)
+   (replacing the default code) and save.
+3. **Deploy -> New deployment -> Web app**, set **Execute as: Me** and
+   **Who has access: Anyone**, then authorize it when asked.
+4. Copy the web app URL (ends in `/exec`) into `docs/config.js`:
+   `window.BOOKING_API = "https://script.google.com/macros/s/.../exec";`
+5. Commit and push - live slot booking is now on the public site.
+
+The script reads its booking rules from this repo's `data/schedule.json`, so
+after changing **Booking times** in the admin, push to update the public site
+(rules refresh within 5 minutes).
+
+## Connect Google Calendar - hosted Node backend (optional)
+
+If you later host `server.js` somewhere (Render, Railway, a VPS), connect it
+with a service account instead. One-time setup, about 10 minutes:
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/) and create
    a project (any name).
@@ -113,10 +135,11 @@ This bakes `data/content.json` into `docs/`, which Pages serves from the
 `main` branch. After editing content in the admin, re-run the build, commit,
 and push to update the public site.
 
-On the static site the Book page shows call/text contact options by default.
-Once the backend is deployed somewhere (see below), put its URL in
-`docs/config.js` (`window.BOOKING_API = "https://..."`) and live slot booking
-works on the static site too - the API already sends CORS headers.
+Live slot booking on the static site needs a backend URL in `docs/config.js`
+(`window.BOOKING_API = "..."`): either the Apps Script web app (see "Connect
+Google Calendar - public site" above) or a hosted copy of `server.js` (CORS
+is already enabled). With no URL set, the Book page falls back to call/text
+contact options.
 
 ## Deploying
 
@@ -136,6 +159,7 @@ lib/          store (JSON files), auth (scrypt + sessions),
 public/       customer site (port 3000)
 admin/        admin site (port 3001)
 docs/         static GitHub Pages build (npm run build-pages)
+apps-script/  Google Apps Script booking backend for the public site
 data/         content, schedule, bookings, settings, auth - the "database"
               (bookings/auth/sessions/settings stay local, never in git)
 tools/        set-password.js, build-pages.js

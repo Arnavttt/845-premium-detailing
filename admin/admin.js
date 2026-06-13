@@ -103,7 +103,7 @@
           '<input value="' + esc(s.time) + '" placeholder="~2 hrs" data-sf="time" style="color:#B8B8B8">' +
           '<button class="btn-remove" type="button">Remove</button>' +
         '</div>' +
-        '<input value="' + esc(s.desc) + '" placeholder="What’s included…" data-sf="desc" style="color:#B8B8B8; margin-top:10px">';
+        '<input value="' + esc(s.desc) + '" placeholder="What\'s included..." data-sf="desc" style="color:#B8B8B8; margin-top:10px">';
       card.querySelectorAll('[data-sf]').forEach(function (input) {
         input.addEventListener('input', function () {
           state.content.services[i][input.getAttribute('data-sf')] = input.value;
@@ -229,7 +229,7 @@
           '<span>' + esc(b.phone) + '</span>' +
           '<span>' + esc(b.vehicle || '-') + '</span>' +
         '</div>' +
-        (b.notes ? '<div class="booking-notes">&ldquo;' + esc(b.notes) + '&rdquo;</div>' : '') +
+        (b.notes ? '<div class="booking-notes">"' + esc(b.notes) + '"</div>' : '') +
         '<div class="booking-footer">' +
           '<span class="booking-created">Received ' + esc(new Date(b.created).toLocaleString()) + '</span>' +
           badge +
