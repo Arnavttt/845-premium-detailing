@@ -1,0 +1,44 @@
+name: Rebuild public site
+
+# When site data or source changes (including saves from the GitHub-hosted
+# admin), rebuild the static docs/ folder that GitHub Pages serves.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/**'
+      - 'public/**'
+      - 'tools/build-pages.js'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Rebuild docs/
+        run: node tools/build-pages.js
+
+      - name: Commit docs/ if it changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain docs)" ]; then
+            git add docs
+            git commit -m "Rebuild public site [skip ci]"
+            git push
+          else
+            echo "docs/ already up to date"
+          fi

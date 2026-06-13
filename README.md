@@ -1,7 +1,50 @@
 # 845 Premium Detailing
 
-Customer website + separate password-protected admin site + booking system that
+Customer website + separate password-protected admin + booking system that
 syncs to Google Calendar. No npm packages needed - just Node.js 18+.
+
+There are two ways to run the admin (backend):
+
+- **Hosted on GitHub (no computer needed)** - a static admin page on GitHub
+  Pages that edits the site by committing to this repo. See
+  [Admin hosted on GitHub](#admin-hosted-on-github). This is the everyday
+  option once the site is published.
+- **Local Node admin** - the full `server.js` admin with password sessions,
+  for running on your own machine. See [Run it](#run-it).
+
+## Admin hosted on GitHub
+
+Live at **https://arnavttt.github.io/845-premium-detailing/manage/** once
+pushed. It runs entirely in the browser and saves changes by committing to
+this repo through the GitHub API, so it is online 24/7 with nothing running on
+your computer. A GitHub Action rebuilds the public site automatically after
+each save.
+
+**Sign in (one time):**
+
+1. Create a GitHub personal access token: go to
+   [github.com/settings/tokens](https://github.com/settings/tokens?type=beta)
+   -> **Generate new token (fine-grained)**.
+2. Set **Resource owner** to your account, **Repository access** to "Only
+   select repositories" -> `845-premium-detailing`, and under **Permissions ->
+   Repository permissions** set **Contents: Read and write**. Generate it and
+   copy the token (starts with `github_pat_`).
+3. Open the admin URL above, paste the token, and sign in. The token is stored
+   only in your browser (never committed) and is what authorizes changes -
+   it is your login. "Sign out" clears it from the device.
+
+**What it edits:** site content, services & pricing, contact info, and booking
+times (slot length, weekly hours, blocked dates, booking window, timezone) -
+plus the live booking backend URL under Settings. Bookings themselves live on
+your Google Calendar (the Bookings tab links to it).
+
+After you save booking times, the live booking backend picks up the change
+within ~5 minutes; other content goes live within ~1 minute once the rebuild
+Action finishes.
+
+> Note: the hosted admin and the local Node admin both edit the same data, but
+> through different routes (repo commits vs. local files). If you use both,
+> `git pull` to keep your local copy in sync.
 
 ## Run it
 
@@ -156,9 +199,10 @@ make sure the host persists it between deploys.
 server.js     both HTTP servers + all API routes
 lib/          store (JSON files), auth (scrypt + sessions),
               calendar (Google service-account JWT), slots (availability)
-public/       customer site (port 3000)
-admin/        admin site (port 3001)
+public/       customer site (port 3000) + manage/ (GitHub-hosted admin)
+admin/        local Node admin site (port 3001)
 docs/         static GitHub Pages build (npm run build-pages)
+.github/      Action that rebuilds docs/ when content or booking times change
 apps-script/  Google Apps Script booking backend for the public site
 data/         content, schedule, bookings, settings, auth - the "database"
               (bookings/auth/sessions/settings stay local, never in git)
