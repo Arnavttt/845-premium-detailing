@@ -10,4 +10,4 @@ window.BOOKING_API = "https://script.google.com/macros/s/AKfycbxBoG2TmeV5LAygkvV
 // Leave empty to keep booking open. To enable: paste your Turnstile *site key*
 // here AND add the matching *secret* as a TURNSTILE_SECRET Script Property in
 // the Apps Script project, then redeploy the script.
-window.TURNSTILE_SITEKEY = "";
+window.TURNSTILE_SITEKEY = "0x4AAAAAADkLDpfqEh9N-xbH";

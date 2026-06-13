@@ -249,8 +249,10 @@
         showError('Please pick an open time slot.');
         return;
       }
-      if (turnstileEnabled()) {
-        payload.cfToken = (window.turnstile && turnstileWidgetId !== null) ? window.turnstile.getResponse(turnstileWidgetId) : '';
+      // Require a Turnstile token only when the widget actually rendered, so a
+      // blocked or failed Turnstile script can't lock real customers out.
+      if (turnstileEnabled() && turnstileWidgetId !== null) {
+        payload.cfToken = window.turnstile.getResponse(turnstileWidgetId);
         if (!payload.cfToken) {
           showError('Please complete the quick verification below.');
           return;
