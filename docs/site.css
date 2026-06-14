@@ -222,7 +222,7 @@ a { text-decoration: none; }
 
 /* ---- reveal-on-scroll (only active once JS adds html.anim, so no-JS shows all) ---- */
 .anim .reveal {
-  opacity: 0; transform: translateY(18px);
+  opacity: 0; transform: translateY(26px);
   transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
   transition-delay: var(--rd, 0ms);
 }
@@ -238,12 +238,12 @@ a { text-decoration: none; }
   content: ''; position: absolute; z-index: -1; top: -8%; left: 50%;
   width: min(720px, 92%); height: 300px; transform: translateX(-50%);
   pointer-events: none;
-  background: radial-gradient(closest-side, rgba(200,16,46,0.16), rgba(200,16,46,0) 70%);
-  animation: heroGlow 7s ease-in-out infinite;
+  background: radial-gradient(closest-side, rgba(200,16,46,0.22), rgba(200,16,46,0) 70%);
+  animation: heroGlow 6.5s ease-in-out infinite;
 }
 @keyframes heroGlow {
-  0%, 100% { opacity: 0.5; transform: translateX(-50%) scale(1); }
-  50% { opacity: 0.85; transform: translateX(-50%) scale(1.06); }
+  0%, 100% { opacity: 0.55; transform: translateX(-50%) scale(1); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.08); }
 }
 
 /* ---- accessibility: respect reduced-motion ---- */

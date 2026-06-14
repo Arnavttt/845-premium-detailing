@@ -62,6 +62,31 @@ if (!fs.existsSync(configPath)) {
   ].join('\n'));
 }
 
+// Cache-busting: append a content hash to each asset reference so browsers
+// fetch the latest CSS/JS after every deploy (filenames stay stable, and
+// GitHub Pages caches by filename, so without this an update can look like it
+// "didn't apply" until the browser cache expires). Hash ignores line endings
+// so Windows/Linux builds produce identical output (no needless rebuilds).
+const crypto = require('crypto');
+function hashOf(absFile) {
+  try {
+    return crypto.createHash('md5')
+      .update(fs.readFileSync(absFile, 'utf8').replace(/\r/g, ''))
+      .digest('hex').slice(0, 8);
+  } catch (e) { return ''; }
+}
+function cacheBust(htmlFile, refs) {
+  if (!fs.existsSync(htmlFile)) return;
+  let h = fs.readFileSync(htmlFile, 'utf8');
+  refs.forEach(function (ref) {
+    const v = hashOf(path.join(path.dirname(htmlFile), ref));
+    if (v) h = h.split('"' + ref + '"').join('"' + ref + '?v=' + v + '"');
+  });
+  fs.writeFileSync(htmlFile, h);
+}
+cacheBust(indexPath, ['site.css', 'assets/fonts.css', 'content.js', 'config.js', 'app.js']);
+cacheBust(path.join(OUT, 'manage', 'index.html'), ['manage.css', 'manage.js']);
+
 // Pages serves files starting with no Jekyll processing.
 fs.writeFileSync(path.join(OUT, '.nojekyll'), '');
 
