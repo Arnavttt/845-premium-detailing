@@ -195,9 +195,10 @@ a { text-decoration: none; }
 /* ---- interactive hover/focus polish (subtle lift + soft shadow) ---- */
 .btn { transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease),
                    transform var(--dur-fast) var(--ease), box-shadow var(--dur) var(--ease); }
-.btn-red:hover, .btn-ghost:hover, .btn-dark:hover { transform: translateY(-2px); }
-.btn-red:hover { box-shadow: 0 8px 22px rgba(200,16,46,0.28); }
-.btn:active { transform: translateY(0); }
+.btn-red:hover, .btn-ghost:hover, .btn-dark:hover { transform: translateY(-3px) scale(1.03); }
+.btn-red:hover { box-shadow: 0 14px 32px rgba(200,16,46,0.45); }
+.btn-ghost:hover { box-shadow: 0 12px 28px rgba(0,0,0,0.4); }
+.btn:active { transform: translateY(-1px) scale(0.99); }
 .brand { transition: opacity var(--dur) var(--ease); }
 .brand:hover { opacity: 0.85; }
 .nav-links a { transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease); }
@@ -205,14 +206,14 @@ a { text-decoration: none; }
 .section-link:hover { transform: translateX(3px); }
 
 .service-card { transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease); }
-.service-card:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(0,0,0,0.35); }
+.service-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 22px 46px rgba(0,0,0,0.5), 0 0 0 1px rgba(200,16,46,0.5); }
 .point { transition: transform var(--dur) var(--ease); }
-.point:hover { transform: translateY(-2px); }
+.point:hover { transform: translateY(-4px); }
 
 .gallery-tile { transition: border-color var(--dur) var(--ease), transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease); }
-.gallery-tile:hover { transform: translateY(-3px); border-color: #C8102E; box-shadow: 0 14px 30px rgba(0,0,0,0.35); }
-.gallery-tile img { transition: transform var(--dur-slow) var(--ease); }
-.gallery-tile:hover img { transform: scale(1.05); }
+.gallery-tile:hover { transform: translateY(-6px) scale(1.02); border-color: #C8102E; box-shadow: 0 22px 46px rgba(0,0,0,0.5); }
+.gallery-tile img { transition: transform 700ms var(--ease); }
+.gallery-tile:hover img { transform: scale(1.1); }
 
 .slot { transition: border-color var(--dur-fast) var(--ease), background-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease); }
 .slot:hover { transform: translateY(-1px); }
@@ -222,7 +223,7 @@ a { text-decoration: none; }
 
 /* ---- reveal-on-scroll (only active once JS adds html.anim, so no-JS shows all) ---- */
 .anim .reveal {
-  opacity: 0; transform: translateY(26px);
+  opacity: 0; transform: translateY(42px) scale(0.96);
   transition: opacity var(--dur-slow) var(--ease), transform var(--dur-slow) var(--ease);
   transition-delay: var(--rd, 0ms);
 }
@@ -230,20 +231,20 @@ a { text-decoration: none; }
 
 /* ---- section/page enter transition on navigation ---- */
 .page.page-anim { animation: pageEnter var(--dur-slow) var(--ease) both; }
-@keyframes pageEnter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes pageEnter { from { opacity: 0; transform: translateY(28px) scale(0.99); } to { opacity: 1; transform: none; } }
 
 /* ---- subtle themed background accent behind the hero (never blocks text) ---- */
 .hero { position: relative; }
 .hero::before {
-  content: ''; position: absolute; z-index: -1; top: -8%; left: 50%;
-  width: min(720px, 92%); height: 300px; transform: translateX(-50%);
+  content: ''; position: absolute; z-index: -1; top: -10%; left: 50%;
+  width: min(920px, 96%); height: 400px; transform: translateX(-50%);
   pointer-events: none;
-  background: radial-gradient(closest-side, rgba(200,16,46,0.22), rgba(200,16,46,0) 70%);
-  animation: heroGlow 6.5s ease-in-out infinite;
+  background: radial-gradient(closest-side, rgba(200,16,46,0.32), rgba(200,16,46,0) 70%);
+  animation: heroGlow 6s ease-in-out infinite;
 }
 @keyframes heroGlow {
-  0%, 100% { opacity: 0.55; transform: translateX(-50%) scale(1); }
-  50% { opacity: 1; transform: translateX(-50%) scale(1.08); }
+  0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.12); }
 }
 
 /* Note: reduced-motion is intentionally NOT honored here, per owner request,
