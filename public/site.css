@@ -246,14 +246,5 @@ a { text-decoration: none; }
   50% { opacity: 1; transform: translateX(-50%) scale(1.08); }
 }
 
-/* ---- accessibility: respect reduced-motion ---- */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
-  .anim .reveal { opacity: 1 !important; transform: none !important; }
-  .hero::before { animation: none; opacity: 0.6; }
-}
+/* Note: reduced-motion is intentionally NOT honored here, per owner request,
+   so the animations play for every visitor regardless of OS settings. */

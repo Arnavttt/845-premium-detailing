@@ -33,7 +33,8 @@
   }
 
   // ---------- motion (reveal-on-scroll + page transitions, reusable) ----------
-  var prefersReduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  // Owner asked NOT to respect prefers-reduced-motion: animations always run.
+  var prefersReduced = false;
   var revealObserver = null;
 
   function initMotion() {
